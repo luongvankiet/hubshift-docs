@@ -1,21 +1,14 @@
 <script setup lang="ts">
-import { useDocusI18n } from '../../composables/useDocusI18n'
+import { useDocusI18n } from "../../composables/useDocusI18n";
 
-const appConfig = useAppConfig()
-const site = useSiteConfig()
+const appConfig = useAppConfig();
+const site = useSiteConfig();
 
-const { localePath, isEnabled, locales } = useDocusI18n()
+const { localePath, isEnabled, locales } = useDocusI18n();
 
-const links = computed(() => appConfig.github && appConfig.github.url
-  ? [
-      {
-        'icon': 'i-simple-icons-github',
-        'to': appConfig.github.url,
-        'target': '_blank',
-        'aria-label': 'GitHub',
-      },
-    ]
-  : [])
+const links = computed(() =>
+  appConfig.github && appConfig.github.url ? [] : []
+);
 </script>
 
 <template>
@@ -38,14 +31,13 @@ const links = computed(() => appConfig.github && appConfig.github.url
           <LanguageSelect />
 
           <template #fallback>
-            <div class="h-8 w-8 animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-md" />
+            <div
+              class="h-8 w-8 animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-md"
+            />
           </template>
         </ClientOnly>
 
-        <USeparator
-          orientation="vertical"
-          class="h-8"
-        />
+        <USeparator orientation="vertical" class="h-8" />
       </template>
 
       <UContentSearchButton class="lg:hidden" />
@@ -54,7 +46,9 @@ const links = computed(() => appConfig.github && appConfig.github.url
         <UColorModeButton />
 
         <template #fallback>
-          <div class="h-8 w-8 animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-md" />
+          <div
+            class="h-8 w-8 animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded-md"
+          />
         </template>
       </ClientOnly>
 
@@ -68,11 +62,7 @@ const links = computed(() => appConfig.github && appConfig.github.url
     </template>
 
     <template #toggle="{ open, toggle }">
-      <IconMenuToggle
-        :open="open"
-        class="lg:hidden"
-        @click="toggle"
-      />
+      <IconMenuToggle :open="open" class="lg:hidden" @click="toggle" />
     </template>
 
     <template #body>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const appConfig = useAppConfig()
+const appConfig = useAppConfig();
 </script>
 
 <template>
@@ -11,6 +11,6 @@ const appConfig = useAppConfig()
     class="h-6 w-auto shrink-0"
   />
   <span v-else>
-    {{ appConfig.header?.title || '{appConfig.header.title}' }}
+    {{ appConfig.header?.title || "{appConfig.header.title}" }}
   </span>
 </template>

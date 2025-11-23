@@ -1,37 +1,41 @@
 export default defineNuxtConfig({
-  extends: ['docus'],
-  modules: ['@nuxtjs/plausible', '@nuxtjs/i18n', 'nuxt-studio'],
-  css: ['~/assets/css/main.css'],
+  extends: ["docus"],
+  modules: ["@nuxtjs/plausible", "@nuxtjs/i18n", "nuxt-studio"],
+  css: ["~/assets/css/main.css"],
   site: {
-    name: 'Docus',
+    name: "Docus",
   },
-  compatibilityDate: '2025-07-18',
+  compatibilityDate: "2025-07-18",
   i18n: {
-    defaultLocale: 'en',
-    locales: [{
-      code: 'en',
-      name: 'English',
-    }, {
-      code: 'fr',
-      name: 'Français',
-    }],
+    defaultLocale: "en",
+    locales: [
+      {
+        code: "en",
+        name: "English",
+      },
+      {
+        code: "fr",
+        name: "Français",
+      },
+    ],
   },
   llms: {
-    domain: 'https://docus.dev',
-    title: 'Docus',
-    description: 'Write beautiful docs with Markdown.',
+    domain: "https://docus.dev",
+    title: "Docus",
+    description: "Write beautiful docs with Markdown.",
     full: {
-      title: 'Docus',
-      description: 'Write beautiful docs with Markdown.',
+      title: "Docus",
+      description: "Write beautiful docs with Markdown.",
     },
   },
   studio: {
-    route: '/admin',
+    route: "/admin",
     repository: {
-      owner: 'nuxt-content',
-      repo: 'docus',
-      branch: 'main',
-      rootDir: 'docs',
+      owner: "nuxt-content",
+      repo: "docus",
+      branch: "main",
+      rootDir: "docs",
     },
   },
-})
+});
+ 

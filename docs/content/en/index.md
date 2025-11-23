@@ -1,267 +1,347 @@
 ---
 seo:
-  title: Write beautiful docs with Markdown
-  description: Ship fast, flexible, and SEO-optimized documentation with beautiful
-    design out of the box. Docus brings together the best of the Nuxt ecosystem.
-    Powered by Nuxt UI.
+  title: Hubshift Documentation
+  description: Complete documentation for Hubshift - NDIS case management and CRM platform for service providers
 ---
 
 ::u-page-hero
 #title
-Write beautiful docs with Markdown.
+Hubshift Documentation
 
 #description
-Ship fast, flexible, and SEO-optimized documentation with beautiful design out of the box. :br Docus brings the best of the Nuxt ecosystem.
+Complete guide to Hubshift, a cloud-based NDIS case management and CRM platform. :br Built for service providers, support coordinators, and frontline workers.
 
 #links
-  :::u-button
-  ---
-  color: neutral
-  size: xl
-  to: en/getting-started/installation
-  trailing-icon: i-lucide-arrow-right
-  ---
-  Get started
-  :::
+:::u-button
 
-  :::u-button
-  ---
-  color: neutral
-  icon: simple-icons-github
-  size: xl
-  to: https://github.com/nuxt-content/docus
-  variant: outline
-  ---
-  Star on GitHub
-  :::
+---
+
+color: neutral
+size: xl
+to: en/0.overview
+trailing-icon: i-lucide-arrow-right
+
+---
+
+Get Started
+:::
+
+:::u-button
+
+---
+
+color: neutral
+icon: i-lucide-code
+size: xl
+to: en/apis/authentication
+variant: outline
+
+---
+
+View APIs
+:::
 
 #headline
-  :::u-button
-  ---
-  size: sm
-  to: https://github.com/nuxt-content/docus/releases/tag/v5.0.0
-  variant: outline
-  ---
-  Docus v5 →
-  :::
+:::u-button
+
+---
+
+size: sm
+variant: outline
+
+---
+
+NDIS Management Platform
+:::
 ::
 
 ::u-page-section
-  :::u-page-grid
-    ::::u-page-card
-    ---
-    spotlight: true
-    class: group col-span-2 lg:col-span-1
-    target: _blank
-    to: https://nuxt.com
-    ---
-      :::::floating-nuxt
-      :::::
-    
+:::u-page-grid
+::::u-page-card
+---
+spotlight: true
+class: group col-span-2 lg:col-span-1
+to: en/0.overview
+---
+:::::div{.flex.items-center.justify-center.h-32}
+::::::i-lucide-info{.text-6xl.text-primary}
+::::::
+:::::
+
     #title
-    Built with [Nuxt 4]{.text-primary}
-    
+    [Platform Overview]{.text-primary}
+
     #description
-    Optimized by the most famous Vue framework. Docus gives you everything you need to build fast, performant, and SEO-friendly websites.
+    Learn about Hubshift's features, user roles, and capabilities. Understand how the platform streamlines NDIS case management for service providers.
     ::::
-  
+
     ::::u-page-card
     ---
     spotlight: true
     class: col-span-2
-    target: _blank
-    to: https://ui.nuxt.com
+    to: en/1.tech-stack
     ---
-      :::::u-color-mode-image
-      ---
-      height: 320
-      width: 859
-      alt: Beautiful visual powered by UI
-      class: w-full h-80 object-cover rounded-lg
-      dark: /landing/dark/templates-ui-pro.webp
-      light: /landing/light/templates-ui-pro.webp
-      ---
-      :::::
-    
-    #title
-    Powered by [Nuxt UI]{.text-primary}
-    
-    #description
-    Beautiful out of the box, minimal by design but highly customizable. Docus leverages Nuxt UI to give you the best docs writing experience with zero boilerplate, just focus on your content.
-    ::::
-  
-    ::::u-page-card
-    ---
-    spotlight: true
-    class: col-span-2
-    target: _blank
-    ---
-      :::::tabs
-        ::::::tabs-item{.mt-5 icon="i-lucide-eye" label="Preview"}
-          :::::::div{.flex.flex-col.gap-4}
-            ::::::::note{.my-0}
-            Here's some additional information for you.
-            ::::::::
-          
-            ::::::::tip{.my-0}
-            Here's a helpful suggestion.
-            ::::::::
-          
-            ::::::::warning{.my-0}
-            Be careful with this action as it might have unexpected results.
-            ::::::::
-          
-            ::::::::caution{.my-0}
-            This action cannot be undone.
-            ::::::::
-          :::::::
-        ::::::
-      
-        ::::::tabs-item
-        ---
-        class: mt-5 mb-2 text-xs overflow-x-auto
-        icon: i-lucide-code
-        label: Code
-        ---
-        ```mdc
-        ::note
-        Here's some additional information.
-        ::
-        
-        ::tip
-        Here's a helpful suggestion.
-        ::
-        
-        ::warning
-        Be careful with this action as it might have unexpected results.
-        ::
-        
-        ::caution
-        This action cannot be undone.
-        ::
-        ```
+      :::::div{.flex.items-center.justify-center.h-32}
+        ::::::i-lucide-layers{.text-6xl.text-primary}
         ::::::
       :::::
-    
+
     #title
-    Enhanced Markdown syntax by [Nuxt Content]{.text-primary}
-    
+    [Technology Stack]{.text-primary}
+
     #description
-    The only thing you need to take care about is writing your content. Write your pages in Markdown and extend with MDC syntax to embed Nuxt UI or custom Vue components. Structure, routing, and rendering are handled for you.
+    Built with React.js and Express.js, powered by MongoDB and AWS infrastructure. Discover the modern tech stack that powers Hubshift's scalable platform.
     ::::
-  
-    ::::u-page-card
-    ---
-    spotlight: true
-    class: col-span-2 md:col-span-1
-    target: _blank
-    ---
-      :::::div{.bg-elevated.rounded-lg.p-3.overflow-x-auto}
-      ```ts [app.config.ts]
-      export default defineAppConfig({
-        ui: {
-          colors: {
-            primary: 'green',
-            secondary: 'sky',
-          },
-        },
-        socials: {
-          x: 'https://x.com/nuxt_js',
-          nuxt: 'https://nuxt.com'
-        }
-      })
-      ```
-      :::::
-    
-    #title
-    Customize with [Nuxt App Config]{.text-primary}
-    
-    #description
-    Update colors, social links, header logos and component styles globally using the `app.config.ts`, no direct code modifications required.
-    ::::
-  
-    ::::u-page-card
-    ---
-    spotlight: true
-    class: col-span-2 md:col-span-1 min-h-[450px]
-    target: _blank
-    ---
-      :::::color-mode-switch
-      :::::
-    
-    #title
-    [Nuxt Color]{.text-primary} mode
-    
-    #description
-    Built-in dark mode provided, no configuration required.
-    ::::
-  
-    ::::u-page-card
-    ---
-    spotlight: true
-    class: col-span-2
-    target: _blank
-    ---
-      :::::u-color-mode-image
-      ---
-      height: 554
-      width: 859
-      alt: Built-in navigation and full-text search
-      class: rounded-lg
-      dark: /landing/dark/command-menu.png
-      format: webp
-      light: /landing/light/command-menu.png
-      loading: lazy
-      ---
-      :::::
-    
-    #title
-    Built-in navigation and [full-text search]{.text-primary}
-    
-    #description
-    Only focus on ordering your content, Docus handles the search modal and auto-generates the side navigation for you.
-    ::::
-  
-    ::::u-page-card
-    ---
-    spotlight: true
-    class: col-span-2
-    target: _blank
-    ---
-      :::::browser-frame
-      :video{.rounded-md controls loop playsinline src="https://res.cloudinary.com/nuxt/video/upload/v1747230893/studio/wzt9zfmdvk7hgmdx3cnt.mp4"}
-      :::::
-    
-    #title
-    Collaborate on [Nuxt Studio]{.text-primary}
-    
-    #description
-    Write and manage your content visually, with zero Markdown knowledge required. Let your non technical colleagues collaborate on the documentation and integrate Vue components without code skills.
-    ::::
-  
+
     ::::u-page-card
     ---
     spotlight: true
     class: col-span-2 lg:col-span-1
-    target: _blank
-    to: https://image.nuxt.com/
+    to: en/2.system-architecture
     ---
-      :::::div{.flex-1.flex.items-center.justify-center}
-        ::::::u-color-mode-image
-        ---
-        alt: Nuxt Image visual
-        class: w-[30%] lg:w-[70%] my-12 lg:my-0
-        dark: /landing/dark/nuxt-image.svg
-        light: /landing/light/nuxt-image.svg
-        ---
+      :::::div{.flex.items-center.justify-center.h-32}
+        ::::::i-lucide-network{.text-6xl.text-primary}
         ::::::
       :::::
-    
+
     #title
-    [Nuxt Image]{.text-primary} optimization
-    
+    [System Architecture]{.text-primary}
+
     #description
-    Docus automatically converts Markdown images to use `<NuxtImg>` .
+    Understand how Hubshift components connect and interact. Learn about the three-tier architecture, data flow, and integration patterns.
     ::::
-  :::
+
+    ::::u-page-card
+    ---
+    spotlight: true
+    class: col-span-2 lg:col-span-1
+    to: en/apis/authentication
+    ---
+      :::::div{.flex.items-center.justify-center.h-32}
+        ::::::i-lucide-code{.text-6xl.text-primary}
+        ::::::
+      :::::
+
+    #title
+    [API Documentation]{.text-primary}
+
+    #description
+    Comprehensive RESTful API documentation with curl examples. Integrate with Hubshift's APIs for authentication, clients, workers, appointments, and incidents.
+    ::::
+
+    ::::u-page-card
+    ---
+    spotlight: true
+    class: col-span-2 lg:col-span-1
+    to: en/3.security
+    ---
+      :::::div{.flex.items-center.justify-center.h-32}
+        ::::::i-lucide-shield{.text-6xl.text-primary}
+        ::::::
+      :::::
+
+    #title
+    [Security & Compliance]{.text-primary}
+
+    #description
+    Learn about Hubshift's security measures, authentication, authorization, and NDIS compliance features. Understand data protection and privacy practices.
+    ::::
+
+    ::::u-page-card
+    ---
+    spotlight: true
+    class: col-span-2
+    to: en/apis/authentication
+    ---
+      :::::div{.bg-elevated.rounded-lg.p-3.overflow-x-auto}
+      ```bash
+      # Example API call
+      curl -X POST http://54.79.179.57:5000/api/user/login \
+        -H "Content-Type: application/json" \
+        -d '{
+          "email": "user@example.com",
+          "password": "SecurePassword123!"
+        }'
+      ```
+      :::::
+
+    #title
+    [Quick API Examples]{.text-primary}
+
+    #description
+    All API endpoints include ready-to-use curl examples for quick integration. Copy and paste commands to test endpoints directly from your terminal.
+    ::::
+
+:::
+::
+
+::u-page-section
+:::u-page-grid
+::::u-page-card
+---
+spotlight: true
+class: col-span-2 lg:col-span-1
+to: en/apis/authentication
+---
+:::::div{.flex.items-center.justify-center.h-32}
+::::::i-lucide-key{.text-6xl.text-primary}
+::::::
+:::::
+
+    #title
+    [Authentication APIs]{.text-primary}
+
+    #description
+    JWT-based authentication with support for web and mobile. User registration, login, password reset, and token management.
+    ::::
+
+    ::::u-page-card
+    ---
+    spotlight: true
+    class: col-span-2 lg:col-span-1
+    to: en/apis/clients
+    ---
+      :::::div{.flex.items-center.justify-center.h-32}
+        ::::::i-lucide-users{.text-6xl.text-primary}
+        ::::::
+      :::::
+
+    #title
+    [Client Management APIs]{.text-primary}
+
+    #description
+    Complete client profile management, NDIS data tracking, goals, medications, and document storage.
+    ::::
+
+    ::::u-page-card
+    ---
+    spotlight: true
+    class: col-span-2 lg:col-span-1
+    to: en/apis/workers
+    ---
+      :::::div{.flex.items-center.justify-center.h-32}
+        ::::::i-lucide-user-cog{.text-6xl.text-primary}
+        ::::::
+      :::::
+
+    #title
+    [Worker Management APIs]{.text-primary}
+
+    #description
+    Health carer and support coordinator management. Availability tracking, qualifications, and performance monitoring.
+    ::::
+
+    ::::u-page-card
+    ---
+    spotlight: true
+    class: col-span-2 lg:col-span-1
+    to: en/apis/appointments
+    ---
+      :::::div{.flex.items-center.justify-center.h-32}
+        ::::::i-lucide-calendar{.text-6xl.text-primary}
+        ::::::
+      :::::
+
+    #title
+    [Appointment APIs]{.text-primary}
+
+    #description
+    Scheduling, rescheduling, swapping, routines, tasks, shift notes, and expense tracking for appointments.
+    ::::
+
+    ::::u-page-card
+    ---
+    spotlight: true
+    class: col-span-2 lg:col-span-1
+    to: en/apis/incidents
+    ---
+      :::::div{.flex.items-center.justify-center.h-32}
+        ::::::i-lucide-alert-triangle{.text-6xl.text-primary}
+        ::::::
+      :::::
+
+    #title
+    [Incident Management APIs]{.text-primary}
+
+    #description
+    AI-powered incident intake, reporting, investigation workflow, and comprehensive analytics with geographic mapping.
+    ::::
+
+:::
+::
+
+::u-page-section
+:::u-page-grid
+::::u-page-card
+---
+spotlight: true
+class: col-span-2
+---
+:::::div{.bg-elevated.rounded-lg.p-6}
+**Key Features:**
+
+      - ✅ Client & Worker Management
+      - ✅ Appointment Scheduling
+      - ✅ Incident Reporting & Analytics
+      - ✅ Document Storage & Management
+      - ✅ Timesheet & Payroll Processing
+      - ✅ NDIS Compliance Tracking
+      - ✅ Real-time Notifications
+      - ✅ Mobile API Support
+      :::::
+
+    #title
+    [Platform Capabilities]{.text-primary}
+
+    #description
+    Hubshift provides a comprehensive suite of features designed specifically for NDIS service providers, from client management to compliance reporting.
+    ::::
+
+    ::::u-page-card
+    ---
+    spotlight: true
+    class: col-span-2 lg:col-span-1
+    ---
+      :::::div{.bg-elevated.rounded-lg.p-6}
+      **Tech Stack:**
+
+      - Frontend: React.js
+      - Backend: Express.js
+      - Database: MongoDB
+      - Infrastructure: AWS
+      - Authentication: JWT
+      - Storage: AWS S3
+      :::::
+
+    #title
+    [Modern Technology]{.text-primary}
+
+    #description
+    Built with industry-standard technologies for scalability, maintainability, and performance. Cloud-native architecture with AWS infrastructure.
+    ::::
+
+    ::::u-page-card
+    ---
+    spotlight: true
+    class: col-span-2 lg:col-span-1
+    ---
+      :::::div{.bg-elevated.rounded-lg.p-6}
+      **Integration:**
+
+      - Stripe (Payments)
+      - Xero (Accounting)
+      - Twilio (SMS/WhatsApp)
+      - AWS SES (Email)
+      - Moodle (LMS)
+      - Python AI/ML
+      :::::
+
+    #title
+    [Third-Party Integrations]{.text-primary}
+
+    #description
+    Seamlessly integrate with payment processors, accounting software, communication services, and AI-powered analysis tools.
+    ::::
+
+:::
 ::

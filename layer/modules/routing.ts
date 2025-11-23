@@ -1,4 +1,4 @@
-import { defineNuxtModule, extendPages, createResolver } from '@nuxt/kit'
+import { defineNuxtModule, createResolver } from '@nuxt/kit'
 
 export default defineNuxtModule({
   meta: {
@@ -6,8 +6,6 @@ export default defineNuxtModule({
   },
   async setup(_options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
-
-    const isI18nEnabled = !!(nuxt.options.i18n && nuxt.options.i18n.locales)
 
     // Ensure useDocusI18n is available in the app
     nuxt.hook('imports:extend', (imports) => {
@@ -19,23 +17,9 @@ export default defineNuxtModule({
       })
     })
 
-    extendPages((pages) => {
-      const landingTemplate = resolve('../app/templates/landing.vue')
-
-      if (isI18nEnabled) {
-        pages.push({
-          name: 'lang-index',
-          path: '/:lang?',
-          file: landingTemplate,
-        })
-      }
-      else {
-        pages.push({
-          name: 'index',
-          path: '/',
-          file: landingTemplate,
-        })
-      }
-    })
+    // Using file-based routing:
+    // - pages/index.vue for /
+    // - pages/[lang].vue for /{locale}
+    // - pages/[[lang]]/[...slug].vue for /{locale}/anything
   },
 })
