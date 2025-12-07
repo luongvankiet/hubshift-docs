@@ -10,64 +10,135 @@ seo:
 
 # Incident Management APIs
 
-Incident management APIs handle reporting, tracking, and analysis of incidents. The system includes AI-powered incident intake, injury photo analysis, compliance monitoring, and comprehensive reporting capabilities.
+### Base Paths
 
-## Base URLs
+- `/api/incident`
+- `/api/incident-report`
+- `/api/incident/intake` (handled within `/api/incident`)
 
-- **Web APIs**: `/api/incident`, `/api/incident-report`
-- **Mobile APIs**: `/api/frontend/incident`
-- **Intake API**: `/api/incidentIntake`
+### Incidents (`/api/incident`)
 
-## Key Concepts
+**Note:** All incident endpoints require authentication. Replace `YOUR_JWT_TOKEN` with the actual token from the login flow.
 
-### Incident Types
+#### GET /get-all-incident - Get all incidents
 
-- **Injury**: Physical injuries
-- **Medical**: Medical incidents
-- **Behavioral**: Behavioral incidents
-- **Property**: Property damage
-- **Other**: Other incident types
-
-### Severity Levels
-
-- **Critical**: Life-threatening or serious
-- **High**: Significant impact
-- **Medium**: Moderate impact
-- **Low**: Minor impact
-
-### Incident Status
-
-- **Draft**: Initial report
-- **Submitted**: Submitted for review
-- **Under Investigation**: Being investigated
-- **Resolved**: Incident resolved
-- **Closed**: Incident closed
-
-## Endpoints
-
-### Create Incident
-
-#### Create Incident (Web)
+**Request:**
 
 ```bash
-curl -X POST http://54.79.179.57:5000/api/incident/create \
-  -H "Authorization: Bearer $TOKEN" \
+curl -X GET "http://54.79.179.57:5000/api/incident/get-all-incident?page=1&createdBy=641062840423e7c1cfec8117" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "incident_id",
+      "incidentType": "injury",
+      "severity": "moderate",
+      "status": "open",
+      "reportedBy": "user_id",
+      "clientId": "client_id",
+      "date": "2024-01-01",
+      "time": "14:30",
+      "location": "Client Location",
+      "description": "Incident description",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ],
+  "total": 50,
+  "page": 1,
+  "limit": 10
+}
+```
+
+#### GET /get-incident-filter - Get incidents with filters
+
+**Request:**
+
+```bash
+curl -X GET "http://54.79.179.57:5000/api/incident/get-incident-filter?status=open&severity=high&startDate=2024-01-01&endDate=2024-01-31" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "incident_id",
+      "status": "open",
+      "severity": "high",
+      "incidentType": "injury"
+    }
+  ],
+  "total": 10
+}
+```
+
+#### GET /\:id - Get incident details
+
+**Request:**
+
+```bash
+curl -X GET "http://54.79.179.57:5000/api/incident/123" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "123",
+    "incidentType": "injury",
+    "severity": "moderate",
+    "status": "open",
+    "reportedBy": {
+      "_id": "user_id",
+      "firstName": "Reporter",
+      "lastName": "Name"
+    },
+    "clientId": {
+      "_id": "client_id",
+      "firstName": "Client",
+      "lastName": "Name"
+    },
+    "date": "2024-01-01",
+    "time": "14:30",
+    "location": "Client Location",
+    "description": "Detailed incident description",
+    "witnesses": [],
+    "actionsTaken": [],
+    "investigation": {},
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  }
+}
+```
+
+#### POST /create - Create incident
+
+**Request:**
+
+```bash
+curl -X POST "http://54.79.179.57:5000/api/incident/create" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "clientId": "client_id",
     "incidentType": "injury",
-    "severity": "high",
-    "date": "2024-01-15",
+    "severity": "moderate",
+    "clientId": "client_id",
+    "date": "2024-01-01",
     "time": "14:30",
-    "location": "123 Main St, Melbourne VIC 3000",
+    "location": "Client Location",
     "description": "Incident description",
-    "witnesses": [
-      {
-        "name": "John Doe",
-        "contact": "+61400000000"
-      }
-    ],
-    "actionsTaken": "First aid provided",
     "reportedBy": "user_id"
   }'
 ```
@@ -79,39 +150,23 @@ curl -X POST http://54.79.179.57:5000/api/incident/create \
   "success": true,
   "message": "Incident created successfully",
   "data": {
-    "id": "incident_id",
-    "incidentNumber": "INC-2024-001",
-    "status": "draft",
-    "createdAt": "2024-01-15T14:30:00Z"
+    "_id": "new_incident_id",
+    "incidentType": "injury",
+    "status": "open",
+    "createdAt": "2024-01-01T00:00:00.000Z"
   }
 }
 ```
 
-#### Create Incident (Mobile)
+#### POST /intake - Intake incident (with file upload)
+
+**Request:**
 
 ```bash
-curl -X POST http://54.79.179.57:5000/api/frontend/incident/create \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "clientId": "client_id",
-    "incidentType": "injury",
-    "severity": "high",
-    "date": "2024-01-15",
-    "time": "14:30",
-    "description": "Incident description"
-  }'
-```
-
-### AI-Powered Incident Intake
-
-#### Incident Intake with File Upload
-
-```bash
-curl -X POST http://54.79.179.57:5000/api/incident/intake \
-  -H "Authorization: Bearer $TOKEN" \
-  -F "file=@/path/to/incident_report.pdf" \
-  -F "clientId=client_id"
+curl -X POST "http://54.79.179.57:5000/api/incident/intake" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -F "file=@/path/to/file.pdf" \
+  -F "data={\"incidentType\":\"injury\",\"description\":\"Incident description\"}"
 ```
 
 **Response:**
@@ -119,43 +174,23 @@ curl -X POST http://54.79.179.57:5000/api/incident/intake \
 ```json
 {
   "success": true,
+  "message": "Incident intake processed successfully",
   "data": {
-    "extractedData": {
-      "incidentType": "injury",
-      "severity": "high",
-      "date": "2024-01-15",
-      "description": "Extracted description",
-      "location": "Extracted location"
-    },
-    "confidence": 0.95,
-    "suggestions": []
+    "_id": "new_incident_id",
+    "fileUrl": "/uploads/incidents/file.pdf",
+    "status": "pending_review"
   }
 }
 ```
 
-#### Store Incident from Intake
+#### POST /analyze-injury-photo - Analyze injury photo (with image upload)
+
+**Request:**
 
 ```bash
-curl -X POST http://54.79.179.57:5000/api/incident/store \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "clientId": "client_id",
-    "extractedData": {
-      "incidentType": "injury",
-      "severity": "high",
-      "date": "2024-01-15",
-      "description": "Incident description"
-    }
-  }'
-```
-
-#### Analyze Injury Photo
-
-```bash
-curl -X POST http://54.79.179.57:5000/api/incident/analyze-injury-photo \
-  -H "Authorization: Bearer $TOKEN" \
-  -F "image=@/path/to/injury_photo.jpg"
+curl -X POST "http://54.79.179.57:5000/api/incident/analyze-injury-photo" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -F "image=@/path/to/image.jpg"
 ```
 
 **Response:**
@@ -165,207 +200,182 @@ curl -X POST http://54.79.179.57:5000/api/incident/analyze-injury-photo \
   "success": true,
   "data": {
     "analysis": {
+      "severity": "moderate",
       "injuryType": "bruise",
-      "severity": "medium",
-      "location": "left_arm",
-      "description": "Bruising on left forearm",
+      "confidence": 0.85,
       "recommendations": ["Apply ice", "Monitor for 24 hours"]
     },
-    "confidence": 0.88
+    "imageUrl": "/uploads/incidents/image.jpg"
   }
 }
 ```
 
-### Get Incidents
+#### PUT /update/\:id - Update incident
 
-#### Get All Incidents
-
-```bash
-curl -X GET "http://54.79.179.57:5000/api/incident/get-all-incident?page=1&limit=10&status=under_investigation&severity=high&startDate=2024-01-01&endDate=2024-12-31" \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-**Query Parameters:**
-
-- `page`: Page number
-- `limit`: Items per page
-- `status`: Filter by status
-- `severity`: Filter by severity
-- `incidentType`: Filter by type
-- `startDate`: Start date filter
-- `endDate`: End date filter
-- `clientId`: Filter by client
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "incidents": [
-      {
-        "id": "incident_id",
-        "incidentNumber": "INC-2024-001",
-        "client": {
-          "id": "client_id",
-          "name": "Jane Smith"
-        },
-        "incidentType": "injury",
-        "severity": "high",
-        "date": "2024-01-15",
-        "time": "14:30",
-        "status": "under_investigation",
-        "reportedBy": {
-          "id": "user_id",
-          "name": "John Doe"
-        }
-      }
-    ],
-    "pagination": {
-      "currentPage": 1,
-      "totalPages": 10,
-      "totalItems": 100
-    }
-  }
-}
-```
-
-#### Get Incidents for User
+**Request:**
 
 ```bash
-curl -X GET http://54.79.179.57:5000/api/incident/get-all-incident-user \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-#### Get Incidents for Supervisor
-
-```bash
-curl -X GET http://54.79.179.57:5000/api/incident/get-all-incident-supervisor \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-#### Get Incidents (Mobile)
-
-```bash
-curl -X GET http://54.79.179.57:5000/api/frontend/incident/get-all-incident-user \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-### Get Incident Details
-
-#### Get Incident Details
-
-```bash
-curl -X GET http://54.79.179.57:5000/api/incident/INCIDENT_ID \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "id": "incident_id",
-    "incidentNumber": "INC-2024-001",
-    "client": {
-      "id": "client_id",
-      "name": "Jane Smith",
-      "dateOfBirth": "1990-01-01"
-    },
-    "incidentType": "injury",
-    "severity": "high",
-    "date": "2024-01-15",
-    "time": "14:30",
-    "location": "123 Main St, Melbourne VIC 3000",
-    "description": "Detailed incident description",
-    "witnesses": [
-      {
-        "name": "John Doe",
-        "contact": "+61400000000",
-        "statement": "Witness statement"
-      }
-    ],
-    "actionsTaken": "First aid provided, ambulance called",
-    "medicalAttention": {
-      "required": true,
-      "provided": true,
-      "hospital": "Melbourne Hospital"
-    },
-    "investigation": {
-      "status": "in_progress",
-      "investigator": "investigator_id",
-      "findings": "Preliminary findings",
-      "recommendations": []
-    },
-    "status": "under_investigation",
-    "reportedBy": {
-      "id": "user_id",
-      "name": "John Doe"
-    },
-    "attachments": [],
-    "createdAt": "2024-01-15T14:30:00Z",
-    "updatedAt": "2024-01-16T10:00:00Z"
-  }
-}
-```
-
-#### Get Incident PDF
-
-```bash
-curl -X GET http://54.79.179.57:5000/api/incident/pdf/INCIDENT_ID \
-  -H "Authorization: Bearer $TOKEN" \
-  -o incident_report.pdf
-```
-
-**Response:** PDF file download
-
-### Update Incident
-
-#### Update Incident
-
-```bash
-curl -X PUT http://54.79.179.57:5000/api/incident/update/INCIDENT_ID \
-  -H "Authorization: Bearer $TOKEN" \
+curl -X PUT "http://54.79.179.57:5000/api/incident/update/123" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
     "description": "Updated description",
-    "actionsTaken": "Updated actions",
-    "investigation": {
-      "findings": "Investigation findings",
-      "recommendations": ["Recommendation 1", "Recommendation 2"]
-    }
+    "severity": "high",
+    "status": "under_investigation"
   }'
 ```
 
-#### Update Incident Status
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Incident updated successfully",
+  "data": {
+    "_id": "123",
+    "severity": "high",
+    "status": "under_investigation",
+    "updatedAt": "2024-01-02T00:00:00.000Z"
+  }
+}
+```
+
+#### PUT /status/\:id - Update incident status
+
+**Request:**
 
 ```bash
-curl -X PUT http://54.79.179.57:5000/api/incident/status/INCIDENT_ID \
-  -H "Authorization: Bearer $TOKEN" \
+curl -X PUT "http://54.79.179.57:5000/api/incident/status/123" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
     "status": "resolved",
-    "resolutionNotes": "Incident resolved with client recovery"
+    "resolutionNotes": "Incident resolved"
   }'
 ```
 
-### Delete Incident
+**Response:**
 
-#### Delete Incident
-
-```bash
-curl -X DELETE http://54.79.179.57:5000/api/incident/delete/INCIDENT_ID \
-  -H "Authorization: Bearer $TOKEN"
+```json
+{
+  "success": true,
+  "message": "Incident status updated successfully",
+  "data": {
+    "_id": "123",
+    "status": "resolved",
+    "resolvedAt": "2024-01-02T00:00:00.000Z",
+    "resolvedBy": "user_id"
+  }
+}
 ```
 
-### Severity Management
+#### DELETE /delete/\:id - Delete incident
 
-#### Get All Severity Levels
+**Request:**
 
 ```bash
-curl -X GET http://54.79.179.57:5000/api/frontend/incident/get-all-severity/list \
-  -H "Authorization: Bearer $TOKEN"
+curl -X DELETE "http://54.79.179.57:5000/api/incident/delete/123" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Incident deleted successfully"
+}
+```
+
+**Note:** Other incident endpoints follow similar patterns. GET endpoints return data arrays or objects, POST endpoints return created resources, PUT endpoints return updated resources, and DELETE endpoints return success messages.
+
+### Incident Reports (`/api/incident-report`)
+
+**Note:** All incident report endpoints require authentication. Replace `YOUR_JWT_TOKEN` with the actual token from the login flow. These endpoints support query parameters for filtering (e.g., `dateStart`, `dateEnd`, `location`, `incident_type`, `severity`, `reported_by`).
+
+#### GET /filters - Get incident report filters
+
+**Request:**
+
+```bash
+curl -X GET "http://54.79.179.57:5000/api/incident-report/filters" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "location": ["Location 1", "Location 2"],
+    "incident_type": ["injury", "fall", "medication"],
+    "reported_by": ["Reporter 1", "Reporter 2"],
+    "severity": ["Low", "Moderate", "High"]
+  }
+}
+```
+
+#### GET /executive-summary - Get executive summary
+
+**Request:**
+
+```bash
+curl -X GET "http://54.79.179.57:5000/api/incident-report/executive-summary?dateStart=2024-01-01&dateEnd=2024-01-31" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "summary": {
+      "topIncidentType": "injury",
+      "latestMonth": {
+        "month": "January 2024",
+        "count": 25,
+        "trend": "up",
+        "trendPercent": 15
+      },
+      "previousMonth": {
+        "month": "December 2023",
+        "count": 20,
+        "trend": "neutral",
+        "trendPercent": 0
+      },
+      "highSeverityCount": 5,
+      "reportableCount": 10,
+      "totalIncidents": 50,
+      "data": {
+        "range": {
+          "start": "2024-01-01",
+          "end": "2024-01-31"
+        },
+        "count": 50,
+        "data": [
+          {
+            "date": "2024-01-01",
+            "count": 2
+          }
+        ],
+        "trend": "up",
+        "trendPercent": 10
+      }
+    },
+    "totalRecords": 50
+  }
+}
+```
+
+#### GET /severity-distribution - Get severity distribution
+
+**Request:**
+
+```bash
+curl -X GET "http://54.79.179.57:5000/api/incident-report/severity-distribution?dateStart=2024-01-01&dateEnd=2024-01-31" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 **Response:**
@@ -375,28 +385,31 @@ curl -X GET http://54.79.179.57:5000/api/frontend/incident/get-all-severity/list
   "success": true,
   "data": [
     {
-      "id": "severity_id",
-      "name": "Critical",
-      "level": 1,
-      "description": "Life-threatening or serious"
+      "severity": "High",
+      "count": 10,
+      "percentage": 20
     },
     {
-      "id": "severity_id",
-      "name": "High",
-      "level": 2,
-      "description": "Significant impact"
+      "severity": "Moderate",
+      "count": 25,
+      "percentage": 50
+    },
+    {
+      "severity": "Low",
+      "count": 15,
+      "percentage": 30
     }
   ]
 }
 ```
 
-### Incident Reports & Analytics
+#### GET /trending-incidents - Get trending incidents
 
-#### Get Incident Count
+**Request:**
 
 ```bash
-curl -X GET http://54.79.179.57:5000/api/incident/count/getIncidentCount \
-  -H "Authorization: Bearer $TOKEN"
+curl -X GET "http://54.79.179.57:5000/api/incident-report/trending-incidents?dateStart=2024-01-01&dateEnd=2024-01-31" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 **Response:**
@@ -405,112 +418,34 @@ curl -X GET http://54.79.179.57:5000/api/incident/count/getIncidentCount \
 {
   "success": true,
   "data": {
-    "total": 150,
-    "byStatus": {
-      "draft": 5,
-      "submitted": 10,
-      "under_investigation": 20,
-      "resolved": 100,
-      "closed": 15
+    "range": {
+      "start": "2024-01-01",
+      "end": "2024-01-31"
     },
-    "bySeverity": {
-      "critical": 5,
-      "high": 25,
-      "medium": 80,
-      "low": 40
-    }
-  }
-}
-```
-
-#### Executive Summary
-
-```bash
-curl -X GET "http://54.79.179.57:5000/api/incident-report/executive-summary?startDate=2024-01-01&endDate=2024-12-31&clientId=client_id" \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "totalIncidents": 150,
-    "criticalIncidents": 5,
-    "trend": "decreasing",
-    "topIncidentTypes": [
+    "count": 50,
+    "data": [
       {
-        "type": "injury",
-        "count": 60,
-        "percentage": 40
+        "date": "2024-01-01",
+        "count": 2
+      },
+      {
+        "date": "2024-01-02",
+        "count": 3
       }
     ],
-    "averageResolutionTime": "5.2 days"
+    "trend": "up",
+    "trendPercent": 15
   }
 }
 ```
 
-#### Severity Distribution
+#### GET /top-incident-types - Get top incident types
+
+**Request:**
 
 ```bash
-curl -X GET http://54.79.179.57:5000/api/incident-report/severity-distribution \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-#### Trending Incidents
-
-```bash
-curl -X GET "http://54.79.179.57:5000/api/incident-report/trending-incidents?period=month" \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-**Query Parameters:**
-
-- `period`: Time period (week, month, quarter, year)
-
-#### Top Incident Types
-
-```bash
-curl -X GET http://54.79.179.57:5000/api/incident-report/top-incident-types \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-#### Location Analysis
-
-```bash
-curl -X GET http://54.79.179.57:5000/api/incident-report/location-analysis \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-#### Compliance Metrics
-
-```bash
-curl -X GET http://54.79.179.57:5000/api/incident-report/compliance-metrics \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "reportingCompliance": 95.5,
-    "averageReportingTime": "2.3 hours",
-    "investigationCompliance": 90.0,
-    "resolutionCompliance": 85.0
-  }
-}
-```
-
-### Incident Mapping
-
-#### Get Incidents for Mapping
-
-```bash
-curl -X GET "http://54.79.179.57:5000/api/incident-report/incident-mapping/incidents?startDate=2024-01-01&endDate=2024-12-31&incidentType=injury" \
-  -H "Authorization: Bearer $TOKEN"
+curl -X GET "http://54.79.179.57:5000/api/incident-report/top-incident-types?dateStart=2024-01-01&dateEnd=2024-01-31&limit=5" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 **Response:**
@@ -520,102 +455,175 @@ curl -X GET "http://54.79.179.57:5000/api/incident-report/incident-mapping/incid
   "success": true,
   "data": [
     {
-      "id": "incident_id",
-      "latitude": -37.8136,
-      "longitude": 144.9631,
-      "incidentType": "injury",
-      "severity": "high",
-      "date": "2024-01-15"
+      "incident_type": "injury",
+      "count": 20,
+      "percentage": 40
+    },
+    {
+      "incident_type": "fall",
+      "count": 15,
+      "percentage": 30
+    },
+    {
+      "incident_type": "medication",
+      "count": 10,
+      "percentage": 20
     }
   ]
 }
 ```
 
-#### Get Incident Heatmap
+#### GET /location-analysis - Get location analysis
+
+**Request:**
 
 ```bash
-curl -X GET http://54.79.179.57:5000/api/incident-report/incident-mapping/heatmap \
-  -H "Authorization: Bearer $TOKEN"
+curl -X GET "http://54.79.179.57:5000/api/incident-report/location-analysis?dateStart=2024-01-01&dateEnd=2024-01-31" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
-### Export Incidents
-
-#### Export Incidents
-
-```bash
-curl -X GET "http://54.79.179.57:5000/api/incident/incident/export?startDate=2024-01-01&endDate=2024-12-31&format=csv" \
-  -H "Authorization: Bearer $TOKEN" \
-  -o incidents_export.csv
-```
-
-**Query Parameters:**
-
-- `startDate`: Start date
-- `endDate`: End date
-- `format`: Export format (csv, excel, pdf)
-
-**Response:** File download
-
-## Error Responses
-
-### Incident Not Found
+**Response:**
 
 ```json
 {
-  "success": false,
-  "message": "Incident not found"
+  "success": true,
+  "data": [
+    {
+      "location": "Location 1",
+      "count": 25,
+      "percentage": 50
+    },
+    {
+      "location": "Location 2",
+      "count": 15,
+      "percentage": 30
+    },
+    {
+      "location": "Location 3",
+      "count": 10,
+      "percentage": 20
+    }
+  ]
 }
 ```
 
-### Validation Error
+#### GET /performance-metrics - Get performance metrics
+
+**Request:**
+
+```bash
+curl -X GET "http://54.79.179.57:5000/api/incident-report/performance-metrics?dateStart=2024-01-01&dateEnd=2024-01-31" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+**Response:**
 
 ```json
 {
-  "success": false,
-  "message": "Validation failed",
-  "errors": {
-    "date": "Date is required",
-    "severity": "Severity is required"
+  "success": true,
+  "data": {
+    "averageResolutionTime": 5.2,
+    "averageReportingTime": 2.1,
+    "totalIncidents": 50,
+    "resolvedIncidents": 45,
+    "resolutionRate": 90
   }
 }
 ```
 
-### Unauthorized Access
+#### GET /medical-outcomes - Get medical outcomes
+
+**Request:**
+
+```bash
+curl -X GET "http://54.79.179.57:5000/api/incident-report/medical-outcomes?dateStart=2024-01-01&dateEnd=2024-01-31" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+**Response:**
 
 ```json
 {
-  "success": false,
-  "message": "Unauthorized to access this incident"
+  "success": true,
+  "data": [
+    {
+      "outcome": "Full Recovery",
+      "count": 30,
+      "percentage": 60
+    },
+    {
+      "outcome": "Ongoing Treatment",
+      "count": 15,
+      "percentage": 30
+    },
+    {
+      "outcome": "Hospitalization",
+      "count": 5,
+      "percentage": 10
+    }
+  ]
 }
 ```
 
-## Best Practices
+#### GET /compliance-metrics - Get compliance metrics
 
-1. **Reporting**
+**Request:**
 
-   - Report incidents immediately
-   - Include all relevant details
-   - Attach supporting documents/photos
+```bash
+curl -X GET "http://54.79.179.57:5000/api/incident-report/compliance-metrics?dateStart=2024-01-01&dateEnd=2024-01-31" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
 
-2. **Investigation**
+**Response:**
 
-   - Document all findings
-   - Include witness statements
-   - Track investigation progress
+```json
+{
+  "success": true,
+  "data": {
+    "totalReportable": 10,
+    "reportedOnTime": 8,
+    "reportedLate": 2,
+    "complianceRate": 80,
+    "averageReportingDelay": 1.5
+  }
+}
+```
 
-3. **Compliance**
+#### GET /compliance-trends - Get compliance trends
 
-   - Meet reporting deadlines
-   - Complete investigations promptly
-   - Maintain proper documentation
+**Request:**
 
-4. **Privacy**
+```bash
+curl -X GET "http://54.79.179.57:5000/api/incident-report/compliance-trends?dateStart=2024-01-01&dateEnd=2024-01-31" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
 
-   - Protect sensitive information
-   - Limit access to authorized personnel
-   - Follow data protection regulations
+**Response:**
 
-5. **Analysis**
-   - Use AI analysis as a tool, not replacement
-   - Review AI suggestions carefully
-   - Validate extracted data
+```json
+{
+  "success": true,
+  "data": {
+    "range": {
+      "start": "2024-01-01",
+      "end": "2024-01-31"
+    },
+    "data": [
+      {
+        "date": "2024-01-01",
+        "complianceRate": 85
+      },
+      {
+        "date": "2024-01-02",
+        "complianceRate": 90
+      }
+    ],
+    "trend": "up",
+    "trendPercent": 5
+  }
+}
+```
+
+**Note:** Other incident report endpoints follow similar patterns. All endpoints support filtering via query parameters (`dateStart`, `dateEnd`, `location`, `incident_type`, `severity`, `reported_by`). Responses typically include aggregated data, counts, percentages, and trend information.
+
+---

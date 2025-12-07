@@ -5,7 +5,7 @@ navigation:
   icon: i-lucide-zap
 seo:
   title: Hubshift API Quick Reference
-  description: Quick reference guide for all Hubshift API endpoints - authentication, appointments, timesheet, payroll, and incidents
+  description: Quick reference guide for all Hubshift API endpoints - authentication, appointments, timesheet, payroll, incidents, forms, shifts, goals, and progress notes
 ---
 
 # API Quick Reference
@@ -255,6 +255,143 @@ seo:
 | GET | `/api/incident-report/incident-mapping/risk-zones` | Get risk zones |
 | GET | `/api/incident-report/incident-mapping/temporal-spatial` | Get temporal spatial analysis |
 
+## 6. FORMS APIs
+
+### Form Templates (`/api/formTemplate`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/formTemplate` | Get all form templates |
+| GET | `/api/formTemplate/published/list` | Get published templates |
+| GET | `/api/formTemplate/categories/list` | Get form template categories |
+| GET | `/api/formTemplate/verify-token` | Verify form submission token (public) |
+| POST | `/api/formTemplate/verify-identity` | Verify identity for form submission (public) |
+| GET | `/api/formTemplate/:id` | Get form template by ID |
+| POST | `/api/formTemplate` | Create form template |
+| PUT | `/api/formTemplate/:id` | Update form template |
+| POST | `/api/formTemplate/:id/versions` | Create template version |
+| DELETE | `/api/formTemplate/:id` | Delete form template |
+| PUT | `/api/formTemplate/:id/publish` | Publish form template |
+| PUT | `/api/formTemplate/:id/archive` | Archive form template |
+| POST | `/api/formTemplate/:id/submissions` | Create form submission for template |
+| POST | `/api/formTemplate/:id/send-email` | Send form template link via email |
+
+### Form Categories (`/api/formCategory`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/formCategory` | Get all form categories |
+| GET | `/api/formCategory/list` | Get category list (simplified) |
+| GET | `/api/formCategory/object-types/list` | Get available object types |
+| GET | `/api/formCategory/object-types/:type/fields` | Get fields for object type |
+| GET | `/api/formCategory/:id` | Get form category by ID |
+| POST | `/api/formCategory` | Create form category |
+| PUT | `/api/formCategory/:id` | Update form category |
+| DELETE | `/api/formCategory/:id` | Delete form category |
+
+### Form Submissions (`/api/formSubmission`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/formSubmission` | Get all form submissions |
+| GET | `/api/formSubmission/client/:id` | Get submissions by client |
+| GET | `/api/formSubmission/:id` | Get form submission by ID |
+| POST | `/api/formSubmission` | Create form submission |
+| PUT | `/api/formSubmission/:id` | Update form submission |
+| DELETE | `/api/formSubmission/:id` | Delete form submission |
+| PUT | `/api/formSubmission/:id/approve` | Approve form submission |
+| PUT | `/api/formSubmission/:id/reject` | Reject form submission |
+| PUT | `/api/formSubmission/:id/assign` | Assign form submission |
+| POST | `/api/formSubmission/:id/signatures` | Add signature to form submission |
+| POST | `/api/formSubmission/:id/attachments` | Add attachment to form submission |
+
+### Field Groups (`/api/fieldGroup`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/fieldGroup` | Get all field groups |
+| GET | `/api/fieldGroup/:id` | Get field group by ID |
+| POST | `/api/fieldGroup` | Create field group |
+| PUT | `/api/fieldGroup/:id` | Update field group |
+| DELETE | `/api/fieldGroup/:id` | Delete field group |
+
+## 7. SHIFT MANAGEMENT APIs
+
+### Create Shift (`/api/createShift`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/createShift/getlists` | Get shift list |
+| GET | `/api/createShift/:id` | Get shift details |
+| POST | `/api/createShift/create` | Create shift |
+| PUT | `/api/createShift/update/:id` | Update shift |
+| PUT | `/api/createShift/swap/:id` | Swap shift |
+| DELETE | `/api/createShift/delete/:id` | Delete shift |
+
+### Shift Allocation (`/api/shiftAllocation`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/shiftAllocation/getlists` | Get shift allocation list |
+| GET | `/api/shiftAllocation/:id` | Get shift allocation details |
+| POST | `/api/shiftAllocation/create` | Create shift allocation |
+| PUT | `/api/shiftAllocation/update/:id` | Update shift allocation |
+| DELETE | `/api/shiftAllocation/delete/:id` | Delete shift allocation |
+
+### Shift Type (`/api/shiftType`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/shiftType/get-all-shiftType` | Get all shift types |
+| POST | `/api/shiftType/create` | Create shift type |
+| PUT | `/api/shiftType/update/:id` | Update shift type |
+| DELETE | `/api/shiftType/delete/:id` | Delete shift type |
+
+### Shift Rate (`/api/shiftRate`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/shiftRate/get-all-shiftRate` | Get all shift rates |
+| GET | `/api/shiftRate/:id` | Get shift rate details |
+| POST | `/api/shiftRate/create` | Create shift rate |
+| PUT | `/api/shiftRate/update/:id` | Update shift rate |
+| DELETE | `/api/shiftRate/delete/:id` | Delete shift rate |
+
+## 8. GOALS APIs
+
+### Goals (`/api/goal`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/goal/getlists` | Get all goals |
+| GET | `/api/goal/getIndividualGoalDetails/:id` | Get individual goal details |
+| POST | `/api/goal/create` | Create goal |
+| PUT | `/api/goal/update/:id` | Update goal |
+| PUT | `/api/goal/updateStatus/:id` | Update goal status |
+| DELETE | `/api/goal/delete/:id` | Delete goal |
+
+## 9. PROGRESS NOTES APIs
+
+### Progress Notes (`/api/progress-note`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/progress-note/getlists/all/:id` | Get progress note list |
+| GET | `/api/progress-note/details/:id` | Get progress note details |
+| POST | `/api/progress-note/create` | Create progress note |
+| PUT | `/api/progress-note/update/:id` | Update progress note |
+| DELETE | `/api/progress-note/delete/:id` | Delete progress note |
+
+### Progress Objectives (`/api/progress-objective`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/progress-objective/getAllProgressObjective` | Get all progress objectives |
+| GET | `/api/progress-objective/getIndividual/:id` | Get progress objective details |
+| POST | `/api/progress-objective/addProgressObjective` | Add progress objective |
+| PUT | `/api/progress-objective/updateProgressObjective/:id` | Update progress objective |
+| DELETE | `/api/progress-objective/deleteProgressObjective/:id` | Delete progress objective |
+
 ## AUTHENTICATION MIDDLEWARE
 
 - **isLoggedIn**: Web authentication (checks cookies or Authorization header)
@@ -269,4 +406,5 @@ seo:
 - **Pagination**: Supported on many list endpoints
 - **Filtering**: Supported on many endpoints
 - **Error Format**: `{ message: string, success: boolean }`
+
 

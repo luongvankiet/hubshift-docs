@@ -19,6 +19,11 @@ const appConfig = useAppConfig();
 const navigation = inject<Ref<ContentNavigationItem[]>>("navigation");
 const config = useRuntimeConfig().public;
 
+// Exclude auth routes from content query - let specific pages handle them
+// Check early to prevent content queries for these routes
+const isAuthRoute =
+  route.path === "/login" || route.path.startsWith("/api/auth/");
+
 // Normalize the path to ensure it matches content collection paths
 // Use route.path directly - it's the most reliable source
 const contentPath = computed(() => {
@@ -104,24 +109,36 @@ const queryPath = computed(() => {
   return contentPath.value;
 });
 
-const [{ data: page }, { data: surround }] = await Promise.all([
-  useAsyncData(
-    kebabCase(contentPath.value),
-    () =>
-      queryCollection(collectionName.value as keyof Collections)
-        .path(queryPath.value)
-        .first() as Promise<DocsCollectionItem>
-  ),
-  useAsyncData(`${kebabCase(contentPath.value)}-surround`, () => {
-    return queryCollectionItemSurroundings(
-      collectionName.value as keyof Collections,
-      queryPath.value,
-      {
-        fields: ["description"],
-      }
-    );
-  }),
-]);
+// Skip content queries for auth routes - let specific pages handle them
+const [{ data: page }, { data: surround }] = isAuthRoute
+  ? [{ data: ref(null) }, { data: ref(null) }]
+  : await Promise.all([
+      useAsyncData(
+        kebabCase(contentPath.value),
+        () =>
+          queryCollection(collectionName.value as keyof Collections)
+            .path(queryPath.value)
+            .first() as Promise<DocsCollectionItem>
+      ),
+      useAsyncData(`${kebabCase(contentPath.value)}-surround`, () => {
+        return queryCollectionItemSurroundings(
+          collectionName.value as keyof Collections,
+          queryPath.value,
+          {
+            fields: ["description"],
+          }
+        );
+      }),
+    ]);
+
+// For auth routes, throw 404 to allow Vue Router to try other routes
+if (isAuthRoute) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: "Page not found",
+    fatal: true,
+  });
+}
 
 if (!page.value) {
   throw createError({
@@ -202,31 +219,6 @@ const editLink = computed(() => {
     <UPageBody>
       <ContentRenderer v-if="page" :value="page" />
 
-      <USeparator>
-        <div v-if="github" class="flex items-center gap-2 text-sm text-muted">
-          <UButton
-            variant="link"
-            color="neutral"
-            :to="editLink"
-            target="_blank"
-            icon="i-lucide-pen"
-            :ui="{ leadingIcon: 'size-4' }"
-          >
-            {{ t("docs.edit") }}
-          </UButton>
-          <span>{{ t("common.or") }}</span>
-          <UButton
-            variant="link"
-            color="neutral"
-            :to="`${github.url}/issues/new/choose`"
-            target="_blank"
-            icon="i-lucide-alert-circle"
-            :ui="{ leadingIcon: 'size-4' }"
-          >
-            {{ t("docs.report") }}
-          </UButton>
-        </div>
-      </USeparator>
       <UContentSurround :surround="surround" />
     </UPageBody>
 
